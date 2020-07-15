@@ -8,6 +8,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MyController {
@@ -17,13 +18,13 @@ public class MyController {
         return "index";
     }
 
-    @RequestMapping({"/add"})
+    @RequestMapping({"/user/add"})
     public String add(Model model){
         model.addAttribute("msg","hello shrio");
         return "/user/add";
     }
 
-    @RequestMapping({"/update"})
+    @RequestMapping({"/user/update"})
     public String update(Model model){
         model.addAttribute("msg","hello shrio");
         return "/user/update";
@@ -52,5 +53,11 @@ public class MyController {
             model.addAttribute("msg","密码错误");
             return "login";
         }
+    }
+
+    @RequestMapping({"/unauthorizedUrl"})
+    @ResponseBody
+    public String unauthorizedUrl(){
+        return "未授权页面";
     }
 }

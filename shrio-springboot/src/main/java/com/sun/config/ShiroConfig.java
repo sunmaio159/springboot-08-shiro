@@ -1,5 +1,6 @@
 package com.sun.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,12 +25,15 @@ public class ShiroConfig {
          role:拥有某个角色权限才能访问
          */
         Map<String, String> filterMap = new LinkedHashMap<>();
+        //授权，正常的情况下，没有授权会跳转到未授权的页面
+        filterMap.put("/user/add","perms[user:add]");
         //拦截
-        filterMap.put("/add","authc");
-        filterMap.put("/update","authc");
+        filterMap.put("/user/*","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //设置登录请求
         shiroFilterFactoryBean.setLoginUrl("/toLogin");
+        //设置未授权页面
+        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorizedUrl");
 
         return shiroFilterFactoryBean;
     }
@@ -46,5 +50,10 @@ public class ShiroConfig {
     @Bean
     public UserRealm userRealm(){
         return new UserRealm();
+    }
+
+    @Bean
+    public ShiroDialect getShiroDialect(){
+        return new ShiroDialect();
     }
 }

@@ -4,6 +4,7 @@ import com.sun.pojo.User;
 import com.sun.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,10 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("执行了=》授权doGetAuthorizationInfo");
-        return null;
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        //数据库获取权限进行授权，---真实业务
+        info.addStringPermission("user:add");
+        return info;
     }
 
     //认证
