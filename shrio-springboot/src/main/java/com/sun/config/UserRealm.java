@@ -1,11 +1,16 @@
 package com.sun.config;
 
+import com.sun.pojo.User;
+import com.sun.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserRealm extends AuthorizingRealm {
+    @Autowired
+    private UserService userService;
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -21,10 +26,11 @@ public class UserRealm extends AuthorizingRealm {
         String name = "root";
         String password = "123";
         UsernamePasswordToken userToken= (UsernamePasswordToken)authenticationToken;
-        if(!userToken.getUsername().equals(name)){
+        User user = userService.queryUserByName(userToken.getUsername());
+        if(user==null){
             return null;
         }
 
-        return new SimpleAuthenticationInfo("",password,"");
+        return new SimpleAuthenticationInfo("",user.getPwd(),"");
     }
 }
